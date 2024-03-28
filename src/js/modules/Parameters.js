@@ -13,12 +13,17 @@ export default class Parameters {
   }
 
   static #duckColors = {
+    black: '#131313',
     brown: '#762825',
-    green: '#419625',
+    green: '#008e2c',
     orangeLight: '#ff712c',
     orange: '#f96a2b',
-    yellow: '#f5de7a',
+    yellow: '#ffe300',
     white: '#f4eddd',
+  }
+
+  static #eggColors = {
+    white: '#fffcec',
   }
 
   constructor() {}
@@ -46,6 +51,11 @@ export default class Parameters {
 
   // public getter for colors
   get duckColors() {
+    return Parameters.#duckColors
+  }
+
+  // public getter for colors
+  get eggColors() {
     return Parameters.#duckColors
   }
 

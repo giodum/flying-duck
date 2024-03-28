@@ -163,8 +163,7 @@ export default class Scene3D {
     // init character
     this.character = new Character()
 
-    this.scene.add(this.character.duck.group)
-    console.log(this.character.duck.group)
+    this.scene.add(this.character.character)
   }
 
   eventListeners() {

@@ -2,6 +2,9 @@ import * as THREE from 'three'
 
 import Parameters from './Parameters'
 
+const DEV_HELPERS = false
+const DEV_WIREFRAMES = true
+
 export default class Duck {
   static geometries = {}
   static materials = {}
@@ -37,12 +40,15 @@ export default class Duck {
   }
 
   #initDuck() {
-    // init group
-    this.group = new THREE.Group()
+    this.group = new THREE.Object3D()
+    this.group.name = 'duck'
 
-    // create body
+    /* ********* */
+    /* DUCK BODY */
+    /* ********* */
 
-    this.groupBody = new THREE.Group()
+    this.groupBody = new THREE.Object3D()
+    this.groupBody.name = 'duck-body'
 
     const bodyMid = new THREE.Mesh(
       Duck.geometries.boxGeometry,
@@ -83,16 +89,8 @@ export default class Duck {
 
     this.groupBody.add(wingLeft)
 
-    const wingRight = new THREE.Mesh(
-      Duck.geometries.boxGeometry,
-      Duck.materials.brown
-    )
-    wingRight.scale.x = 0.25
-    wingRight.scale.y = 0.45
-    wingRight.scale.z = 0.8
-    wingRight.position.x = -(bodyMid.scale.x / 2 + wingRight.scale.x / 2)
-    wingRight.position.y = -(bodyMid.scale.y - wingRight.scale.y) / 2
-    wingRight.position.z = -(bodyMid.scale.z - wingRight.scale.z)
+    const wingRight = wingLeft.clone()
+    wingRight.position.x = -wingRight.position.x
 
     this.groupBody.add(wingRight)
 
@@ -101,8 +99,8 @@ export default class Duck {
       Duck.materials.brown
     )
     tailCenter.scale.x = bodyMid.scale.x / 9
-    tailCenter.scale.y = bodyMid.scale.y / 1.5
-    tailCenter.scale.z = bodyMid.scale.x / 9
+    tailCenter.scale.y = bodyMid.scale.y / 0.8
+    tailCenter.scale.z = bodyMid.scale.x / 5
     tailCenter.position.y = -(bodyMid.scale.y - tailCenter.scale.y) / 1.5
     tailCenter.position.z = -(bodyMid.scale.z / 2 + tailCenter.scale.z / 2)
 
@@ -113,27 +111,92 @@ export default class Duck {
       Duck.materials.brown
     )
     tailLeft.scale.x = bodyMid.scale.x / 9
-    tailLeft.scale.y = bodyMid.scale.y / 2.2
-    tailLeft.scale.z = bodyMid.scale.x / 9
+    tailLeft.scale.y = bodyMid.scale.y / 1.1
+    tailLeft.scale.z = bodyMid.scale.x / 5
     tailLeft.position.x = -(tailCenter.scale.x / 2 + tailLeft.scale.x / 2)
     tailLeft.position.y = -(bodyMid.scale.y - tailLeft.scale.y) / 1.5
     tailLeft.position.z = -(bodyMid.scale.z / 2 + tailLeft.scale.z / 2)
 
     this.groupBody.add(tailLeft)
 
-    const tailRight = new THREE.Mesh(
-      Duck.geometries.boxGeometry,
-      Duck.materials.brown
-    )
-    tailRight.scale.x = bodyMid.scale.x / 9
-    tailRight.scale.y = bodyMid.scale.y / 2.2
-    tailRight.scale.z = bodyMid.scale.x / 9
-    tailRight.position.x = tailCenter.scale.x / 2 + tailRight.scale.x / 2
-    tailRight.position.y = -(bodyMid.scale.y - tailRight.scale.y) / 1.5
-    tailRight.position.z = -(bodyMid.scale.z / 2 + tailRight.scale.z / 2)
+    const tailRight = tailLeft.clone()
+    tailRight.position.x = -tailRight.position.x
 
     this.groupBody.add(tailRight)
 
+    if (DEV_HELPERS) {
+      const groupBodyHelper = new THREE.BoxHelper(this.groupBody, 'brown')
+      this.group.add(groupBodyHelper)
+    }
+
     this.group.add(this.groupBody)
+
+    /* ********* */
+    /* DUCK HEAD */
+    /* ********* */
+
+    this.groupHead = new THREE.Object3D()
+    this.groupHead.name = 'duck-head'
+
+    const head = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.green
+    )
+    head.position.y = head.scale.y / 2 + bodyMid.scale.y / 2 + bodyTop.scale.y
+
+    this.groupHead.add(head)
+
+    const beak = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.yellow
+    )
+    beak.scale.x = 0.7
+    beak.scale.y = 0.35
+    beak.scale.z = 0.5
+    beak.position.y = beak.scale.y / 2 + 0.75
+    beak.position.z = bodyMid.scale.z / 2 + beak.scale.z / 2
+
+    this.groupHead.add(beak)
+
+    const leftEyeGroup = new THREE.Group()
+
+    const leftEye = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.white
+    )
+    leftEye.scale.x = 0.45
+    leftEye.scale.y = 0.45
+    leftEye.scale.z = 0.15
+    leftEye.position.y = 1
+
+    leftEyeGroup.add(leftEye)
+
+    const leftPupil = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.black
+    )
+    leftPupil.scale.x = 0.15
+    leftPupil.scale.y = 0.15
+    leftPupil.scale.z = 0.05
+    leftPupil.position.y = leftEye.position.y
+    leftPupil.position.z = leftPupil.scale.z / 2 + leftPupil.scale.z
+
+    leftEyeGroup.position.x = bodyMid.scale.x / 2 + leftEye.scale.z / 2
+    leftEyeGroup.rotation.y = Math.PI / 2
+    leftEyeGroup.add(leftPupil)
+
+    this.groupHead.add(leftEyeGroup)
+
+    const rightEyeGroup = leftEyeGroup.clone()
+    rightEyeGroup.position.x = -rightEyeGroup.position.x
+    rightEyeGroup.rotation.y = -rightEyeGroup.rotation.y
+    this.groupHead.add(rightEyeGroup)
+
+    if (DEV_HELPERS) {
+      const groupHead = new THREE.BoxHelper(this.groupHead, 'green')
+      this.group.add(groupHead)
+    }
+
+    this.group.add(this.groupHead)
   }
 }
