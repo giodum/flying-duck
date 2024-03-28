@@ -6,6 +6,21 @@ export default class Parameters {
     param1: 5,
   }
 
+  static #colors = {
+    floor: '#87CEEB',
+    fog: '#D5F8F8',
+    sky: '#87CEEB',
+  }
+
+  static #duckColors = {
+    brown: '#762825',
+    green: '#419625',
+    orangeLight: '#ff712c',
+    orange: '#f96a2b',
+    yellow: '#f5de7a',
+    white: '#f4eddd',
+  }
+
   constructor() {}
 
   static getInstance() {
@@ -22,6 +37,16 @@ export default class Parameters {
   // public getter for params
   get params() {
     return Parameters.#params
+  }
+
+  // public getter for colors
+  get colors() {
+    return Parameters.#colors
+  }
+
+  // public getter for colors
+  get duckColors() {
+    return Parameters.#duckColors
   }
 
   // setter object for callback functions

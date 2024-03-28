@@ -8,6 +8,9 @@ import gsap from 'gsap'
 import math from 'canvas-sketch-util/math'
 import random from 'canvas-sketch-util/random'
 
+import Character from './Character'
+import Parameters from './Parameters'
+
 const DEV_HELPERS = true
 const DEV_WIREFRAMES = true
 
@@ -53,8 +56,11 @@ export default class Scene3D {
     // init lights
     this.#initLights()
 
-    // test scene
-    this.#testScene()
+    // init floor
+    this.#initFloor()
+
+    // init elements
+    this.#initElements()
 
     // add event listeners
     this.eventListeners()
@@ -72,10 +78,14 @@ export default class Scene3D {
     })
     this.renderer.setSize(this.#window.width, this.#window.height)
     this.renderer.setPixelRatio(window.devicePixelRatio)
-    this.renderer.setClearColor(0x000000, 0)
+    this.renderer.setClearColor(this.parameters.colors.sky)
+    this.renderer.shadowMap.enabled = true
 
     // init scene
     this.scene = new THREE.Scene()
+
+    // add fog
+    this.scene.fog = new THREE.Fog(this.parameters.colors.fog, 100, 300)
   }
 
   #initBasicHelpers() {
@@ -94,34 +104,67 @@ export default class Scene3D {
   #initCamera() {
     // init camera
     this.camera = new THREE.PerspectiveCamera(
-      50,
+      45,
       this.#window.aspectRatio,
-      0.1,
-      100
+      1,
+      2000
     )
-    this.camera.position.set(10, 10, 10)
-    this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+    // this.camera.position.set(40, 20, 100)
+    this.camera.position.set(10, 5, 10)
+    this.scene.add(this.camera)
+
+    // if (DEV_HELPERS) {
+    //   const cameraHelper = new THREE.CameraHelper(this.camera)
+    //   this.scene.add(cameraHelper)
+    // }
   }
 
   #initOrbitControl() {
     this.orbit = new OrbitControls(this.camera, this.renderer.domElement)
+    this.orbit.minDistance = 1
+    this.orbit.maxDistance = 250
     this.orbit.update()
   }
 
   #initLights() {
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 10)
-    this.ambientLight.position.set(0, 0, 0)
+    this.ambientLight = new THREE.AmbientLight(0xc5f5f5, 3)
     this.scene.add(this.ambientLight)
+
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+    this.directionalLight.position.set(30, 20, 0)
+    this.directionalLight.castShadow = true
+    this.scene.add(this.directionalLight)
+
+    if (DEV_HELPERS) {
+      const directionalLightHelper = new THREE.DirectionalLightHelper(
+        this.directionalLight,
+        5
+      )
+      this.scene.add(directionalLightHelper)
+    }
   }
 
-  #testScene() {
-    const geometry = new THREE.SphereGeometry(3, 20, 20)
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x444,
-      wireframe: DEV_WIREFRAMES,
+  #initFloor() {
+    // init floor
+    this.floor = {}
+    this.floor.geometry = new THREE.PlaneGeometry(1000, 1000)
+    this.floor.material = new THREE.MeshBasicMaterial({
+      color: this.parameters.colors.floor,
     })
-    const mesh = new THREE.Mesh(geometry, material)
-    this.scene.add(mesh)
+    this.floor.mesh = new THREE.Mesh(this.floor.geometry, this.floor.material)
+
+    this.floor.mesh.rotation.x = -Math.PI / 2
+    this.floor.mesh.position.y = -100
+
+    this.scene.add(this.floor.mesh)
+  }
+
+  #initElements() {
+    // init character
+    this.character = new Character()
+
+    this.scene.add(this.character.duck.group)
+    console.log(this.character.duck.group)
   }
 
   eventListeners() {
