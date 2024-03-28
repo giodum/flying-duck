@@ -106,20 +106,33 @@ export default class Duck {
     tailCenter.position.y = -(bodyMid.scale.y - tailCenter.scale.y) / 1.5
     tailCenter.position.z = -(bodyMid.scale.z / 2 + tailCenter.scale.z / 2)
 
-    // dove ?
+    this.groupBody.add(tailCenter)
 
-    // const tailLeft = new THREE.Mesh(
-    //   Duck.geometries.boxGeometry,
-    //   Duck.materials.brown
-    // )
-    // tailLeft.scale.x = bodyMid.scale.x / 9
-    // tailLeft.scale.y = bodyMid.scale.y / 2.2
-    // tailLeft.scale.z = bodyMid.scale.x / 9
-    // tailLeft.position.x = -(tailCenter.scale.x / 2 + tailLeft.scale.x / 2)
-    // tailLeft.position.y = -(bodyMid.scale.y - tailLeft.scale.y) / 1.5
-    // tailLeft.position.z = -(bodyMid.scale.z / 2 + tailLeft.scale.z / 2)
+    const tailLeft = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.brown
+    )
+    tailLeft.scale.x = bodyMid.scale.x / 9
+    tailLeft.scale.y = bodyMid.scale.y / 2.2
+    tailLeft.scale.z = bodyMid.scale.x / 9
+    tailLeft.position.x = -(tailCenter.scale.x / 2 + tailLeft.scale.x / 2)
+    tailLeft.position.y = -(bodyMid.scale.y - tailLeft.scale.y) / 1.5
+    tailLeft.position.z = -(bodyMid.scale.z / 2 + tailLeft.scale.z / 2)
 
-    // this.groupBody.add(tailLeft)
+    this.groupBody.add(tailLeft)
+
+    const tailRight = new THREE.Mesh(
+      Duck.geometries.boxGeometry,
+      Duck.materials.brown
+    )
+    tailRight.scale.x = bodyMid.scale.x / 9
+    tailRight.scale.y = bodyMid.scale.y / 2.2
+    tailRight.scale.z = bodyMid.scale.x / 9
+    tailRight.position.x = tailCenter.scale.x / 2 + tailRight.scale.x / 2
+    tailRight.position.y = -(bodyMid.scale.y - tailRight.scale.y) / 1.5
+    tailRight.position.z = -(bodyMid.scale.z / 2 + tailRight.scale.z / 2)
+
+    this.groupBody.add(tailRight)
 
     this.group.add(this.groupBody)
   }
