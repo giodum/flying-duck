@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import gsap from 'gsap'
+
 import Duck from './Duck'
 import Parameters from './Parameters'
 
@@ -29,6 +31,9 @@ export default class Character {
     this.character = new THREE.Group()
     this.character.add(this.#duck.group)
     this.character.add(this.#egg.group)
+
+    // init egg gsap animations
+    this.#initCharacterAnimation()
   }
 
   #initGeometriesAndMaterials() {
@@ -96,6 +101,26 @@ export default class Character {
     this.eggPropellerGroup.add(eggPropellerGroup3)
 
     this.#egg.group.add(this.eggPropellerGroup)
+  }
+
+  #initCharacterAnimation() {
+    gsap.to(this.character.position, {
+      duration: 2,
+      x: -2,
+      y: 4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.out',
+    })
+
+    this.character.rotation.x = -Math.PI / 9
+    gsap.to(this.character.rotation, {
+      duration: 6,
+      x: Math.PI / 9,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.out',
+    })
   }
 
   #animateEgg(time) {

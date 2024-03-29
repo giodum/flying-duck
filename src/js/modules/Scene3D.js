@@ -110,8 +110,8 @@ export default class Scene3D {
       1,
       2000
     )
-    // this.camera.position.set(40, 20, 100)
-    this.camera.position.set(10, 5, 10)
+    this.camera.position.set(40, 20, 100)
+    // this.camera.position.set(10, 5, 10)
     this.scene.add(this.camera)
 
     // if (DEV_HELPERS) {
@@ -163,6 +163,7 @@ export default class Scene3D {
   #initElements() {
     // init character
     this.character = new Character()
+    this.character.character.rotation.y = Math.PI / 2
     this.scene.add(this.character.character)
 
     // init clouds
