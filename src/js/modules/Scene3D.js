@@ -9,6 +9,7 @@ import math from 'canvas-sketch-util/math'
 import random from 'canvas-sketch-util/random'
 
 import Character from './Character'
+import Cloud from './Cloud'
 import Parameters from './Parameters'
 
 const DEV_HELPERS = true
@@ -162,8 +163,18 @@ export default class Scene3D {
   #initElements() {
     // init character
     this.character = new Character()
-
     this.scene.add(this.character.character)
+
+    // init clouds
+    const nClouds = random.rangeFloor(2, 7)
+    for (let i = 0; i < nClouds; i++) {
+      const cloud = new Cloud({
+        delay: random.range(0, 3),
+        y: random.rangeFloor(-6, -2),
+        z: random.range(-20, 20),
+      })
+      this.scene.add(cloud.mesh)
+    }
   }
 
   eventListeners() {

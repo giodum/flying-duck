@@ -7,6 +7,7 @@ export default class Parameters {
   }
 
   static #colors = {
+    clouds: '#C0D5E2',
     floor: '#87CEEB',
     fog: '#D5F8F8',
     sky: '#87CEEB',
