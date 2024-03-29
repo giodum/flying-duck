@@ -50,8 +50,12 @@ export default class Character {
     this.#egg.group = new THREE.Object3D()
     this.#egg.group.name = 'egg'
 
+    /* ************** */
+    /* MAIN EGG SHAPE */
+    /* ************** */
+
     const eggGeometry = new THREE.CapsuleGeometry(1.4, 1.1, 10, 45)
-    const eggMesh = new THREE.Mesh(eggGeometry, Duck.materials.white)
+    const eggMesh = new THREE.Mesh(eggGeometry, Character.materials.white)
     eggMesh.rotation.x = Math.PI / 2
 
     this.#egg.group.add(eggMesh)
@@ -59,20 +63,23 @@ export default class Character {
     const eggBorderGeometry = new THREE.BoxGeometry(1.35, 0.2, 1.35, 2, 2)
     const eggBorderMesh = new THREE.Mesh(
       eggBorderGeometry,
-      Duck.materials.white
+      Character.materials.white
     )
     eggBorderMesh.position.y = 1.4
 
     this.#egg.group.add(eggBorderMesh)
 
+    /* ************* */
+    /* EGG PROPELLER */
+    /* ************* */
+
     const eggPropellerGroup1 = new THREE.Group()
     const eggPropeller1Geometry = new THREE.BoxGeometry(0.2, 1.4, 0.2, 2, 2)
     const eggPropeller1Mesh = new THREE.Mesh(
       eggPropeller1Geometry,
-      Duck.materials.white
+      Character.materials.white
     )
     eggPropeller1Mesh.position.y = 0.7
-    // TODO: rimuovere
     eggPropellerGroup1.position.z = -2.05
 
     eggPropellerGroup1.add(eggPropeller1Mesh)
@@ -83,11 +90,23 @@ export default class Character {
     const eggPropellerGroup3 = eggPropellerGroup1.clone()
     eggPropellerGroup3.rotation.z = -(Math.PI * 2) / 3
 
-    const eggPropellerGroup = new THREE.Group()
-    eggPropellerGroup.add(eggPropellerGroup1)
-    eggPropellerGroup.add(eggPropellerGroup2)
-    eggPropellerGroup.add(eggPropellerGroup3)
+    this.eggPropellerGroup = new THREE.Group()
+    this.eggPropellerGroup.add(eggPropellerGroup1)
+    this.eggPropellerGroup.add(eggPropellerGroup2)
+    this.eggPropellerGroup.add(eggPropellerGroup3)
 
-    this.#egg.group.add(eggPropellerGroup)
+    this.#egg.group.add(this.eggPropellerGroup)
+  }
+
+  #animateEgg(time) {
+    this.eggPropellerGroup.rotation.z = time * 0.01
+  }
+
+  animate(time) {
+    // animate duck
+    this.#duck.animate(time)
+
+    // animate egg
+    this.#animateEgg(time)
   }
 }

@@ -178,9 +178,15 @@ export default class Scene3D {
   animate(time) {
     requestAnimationFrame((time) => this.animate(time))
 
+    this.stats.begin()
+
+    this.character.animate(time)
+
     // clear buffer and render the scene
     this.renderer.clear()
     this.renderer.render(this.scene, this.camera)
+
+    this.stats.end()
   }
 
   mouseMove(event) {

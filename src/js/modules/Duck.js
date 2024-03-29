@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 
+import gsap from 'gsap'
+
 import Parameters from './Parameters'
 
 const DEV_HELPERS = false
@@ -18,6 +20,9 @@ export default class Duck {
 
     // initialize duck
     this.#initDuck()
+
+    // init gsap animations
+    this.#initAnimations()
   }
 
   #initGeometriesAndMaterials() {
@@ -158,7 +163,8 @@ export default class Duck {
 
     this.groupHead.add(beak)
 
-    const leftEyeGroup = new THREE.Group()
+    this.leftEyeGroup = new THREE.Group()
+    this.leftEyeGroup.name = 'left-eye-group'
 
     const leftEye = new THREE.Mesh(
       Duck.geometries.boxGeometry,
@@ -169,7 +175,7 @@ export default class Duck {
     leftEye.scale.z = 0.15
     leftEye.position.y = 1
 
-    leftEyeGroup.add(leftEye)
+    this.leftEyeGroup.add(leftEye)
 
     const leftPupil = new THREE.Mesh(
       Duck.geometries.boxGeometry,
@@ -181,16 +187,18 @@ export default class Duck {
     leftPupil.position.y = leftEye.position.y
     leftPupil.position.z = leftPupil.scale.z / 2 + leftPupil.scale.z
 
-    leftEyeGroup.position.x = bodyMid.scale.x / 2 + leftEye.scale.z / 2
-    leftEyeGroup.rotation.y = Math.PI / 2
-    leftEyeGroup.add(leftPupil)
+    this.leftEyeGroup.position.x = bodyMid.scale.x / 2 + leftEye.scale.z / 2
+    this.leftEyeGroup.rotation.y = Math.PI / 2
+    this.leftEyeGroup.add(leftPupil)
 
-    this.groupHead.add(leftEyeGroup)
+    this.groupHead.add(this.leftEyeGroup)
 
-    const rightEyeGroup = leftEyeGroup.clone()
-    rightEyeGroup.position.x = -rightEyeGroup.position.x
-    rightEyeGroup.rotation.y = -rightEyeGroup.rotation.y
-    this.groupHead.add(rightEyeGroup)
+    this.rightEyeGroup = this.leftEyeGroup.clone()
+    this.rightEyeGroup.name = 'right-eye-group'
+
+    this.rightEyeGroup.position.x = -this.rightEyeGroup.position.x
+    this.rightEyeGroup.rotation.y = -this.rightEyeGroup.rotation.y
+    this.groupHead.add(this.rightEyeGroup)
 
     if (DEV_HELPERS) {
       const groupHead = new THREE.BoxHelper(this.groupHead, 'green')
@@ -198,5 +206,37 @@ export default class Duck {
     }
 
     this.group.add(this.groupHead)
+  }
+
+  #initAnimations() {
+    // animate left eye
+    gsap.to(this.leftEyeGroup.scale, {
+      duration: 0.7,
+      x: 1.8,
+      ease: 'elastic.inOut(1,0.3)',
+      repeat: -1,
+      yoyo: true,
+    })
+
+    // animate right eye
+    gsap.to(this.rightEyeGroup.scale, {
+      duration: 1.1,
+      y: 1.4,
+      ease: 'elastic.inOut(1,0.3)',
+      repeat: -1,
+      yoyo: true,
+    })
+
+    gsap.to(this.rightEyeGroup.position, {
+      duration: 1.1,
+      y: -0.4,
+      ease: 'elastic.inOut(1,0.3)',
+      repeat: -1,
+      yoyo: true,
+    })
+  }
+
+  animate(time) {
+    // this.leftEyeGroup.scale.x
   }
 }
