@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 
 import Parameters from './Parameters'
+import Utils3D from './Utils3D'
 
 import random from 'canvas-sketch-util/random'
 
@@ -65,6 +66,9 @@ export default class Cloud {
     this.cloudGroup.add(cloud)
     this.cloudGroup.add(cloud2)
     this.cloudGroup.add(cloud3)
+
+    // enable shadows (traversing all elements)
+    // Utils3D.shadowSupport(this.cloudGroup)
   }
 
   #initCloudAnimation(config) {

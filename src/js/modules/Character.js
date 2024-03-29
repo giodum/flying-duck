@@ -4,6 +4,7 @@ import gsap from 'gsap'
 
 import Duck from './Duck'
 import Parameters from './Parameters'
+import Utils3D from './Utils3D'
 
 export default class Character {
   static materials = {}
@@ -31,6 +32,9 @@ export default class Character {
     this.character = new THREE.Group()
     this.character.add(this.#duck.group)
     this.character.add(this.#egg.group)
+
+    // enable shadows (traversing all elements)
+    Utils3D.shadowSupport(this.character)
 
     // init egg gsap animations
     this.#initCharacterAnimation()
