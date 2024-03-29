@@ -12,8 +12,8 @@ import Character from './Character'
 import Cloud from './Cloud'
 import Parameters from './Parameters'
 
-const DEV_HELPERS = true
-const DEV_WIREFRAMES = true
+const DEV_HELPERS = false
+const DEV_WIREFRAMES = false
 
 export default class Scene3D {
   // unique instance
@@ -58,7 +58,7 @@ export default class Scene3D {
     this.#initLights()
 
     // init floor
-    this.#initFloor()
+    // this.#initFloor()
 
     // init elements
     this.#initElements()
@@ -77,6 +77,7 @@ export default class Scene3D {
       antialias: true,
       canvas: document.querySelector('canvas'),
     })
+
     this.renderer.setSize(this.#window.width, this.#window.height)
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setClearColor(this.parameters.colors.sky)
@@ -110,8 +111,8 @@ export default class Scene3D {
       1,
       2000
     )
-    this.camera.position.set(40, 20, 100)
-    // this.camera.position.set(10, 5, 10)
+    // this.camera.position.set(40, 20, 100)
+    this.camera.position.set(20, 10, 30)
     this.scene.add(this.camera)
 
     // if (DEV_HELPERS) {
@@ -167,11 +168,11 @@ export default class Scene3D {
     this.scene.add(this.character.character)
 
     // init clouds
-    const nClouds = random.rangeFloor(2, 7)
+    const nClouds = random.rangeFloor(3, 9)
     for (let i = 0; i < nClouds; i++) {
       const cloud = new Cloud({
-        delay: random.range(0, 3),
-        y: random.rangeFloor(-6, -2),
+        delay: random.range(0, 3.5),
+        y: random.rangeFloor(-8, -2),
         z: random.range(-20, 20),
       })
       this.scene.add(cloud.mesh)
@@ -219,9 +220,9 @@ export default class Scene3D {
 
   resize() {
     // update window info
-    this.#window.aspectRatio = window.devicePixelRatio
-    this.#window.height = window.height
-    this.#window.width = window.width
+    this.#window.height = window.innerHeight
+    this.#window.width = window.innerWidth
+    this.#window.aspectRatio = window.innerWidth / window.innerHeight
 
     // update renderer
     this.renderer.setSize(this.#window.width, this.#window.height)

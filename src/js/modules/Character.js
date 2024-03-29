@@ -101,6 +101,14 @@ export default class Character {
     this.eggPropellerGroup.add(eggPropellerGroup3)
 
     this.#egg.group.add(this.eggPropellerGroup)
+
+    /* ***** */
+    /* WINGS */
+    /* ***** */
+    const wingsGeometry = new THREE.BoxGeometry(6, 0.07, 0.9)
+    const wingsMesh = new THREE.Mesh(wingsGeometry, Character.materials.white)
+
+    this.#egg.group.add(wingsMesh)
   }
 
   #initCharacterAnimation() {
@@ -110,7 +118,7 @@ export default class Character {
       y: 4,
       repeat: -1,
       yoyo: true,
-      ease: 'sine.out',
+      ease: 'sine.inOut',
     })
 
     this.character.rotation.x = -Math.PI / 9
@@ -119,7 +127,7 @@ export default class Character {
       x: Math.PI / 9,
       repeat: -1,
       yoyo: true,
-      ease: 'sine.out',
+      ease: 'sine.inOut',
     })
   }
 

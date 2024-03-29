@@ -42,7 +42,7 @@ export default class Cloud {
     // initialize material
     if (!Cloud.#cloudMaterial) {
       Cloud.#cloudMaterial = new THREE.MeshPhongMaterial({
-        color: this.parameters.clouds,
+        color: this.parameters.colors.clouds,
         flatShading: true,
       })
     }
