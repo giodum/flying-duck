@@ -80,7 +80,7 @@ export default class Scene3D {
 
     this.renderer.setSize(this.#window.width, this.#window.height)
     this.renderer.setPixelRatio(window.devicePixelRatio)
-    this.renderer.setClearColor(this.parameters.colors.sky)
+    this.renderer.setClearColor(this.parameters.colors.sky, 0.5)
     this.renderer.shadowMap.enabled = true
 
     // init scene

@@ -47,7 +47,7 @@ export default class Character {
       for (let color in this.parameters.eggColors) {
         const material = new THREE.MeshPhongMaterial({
           color: this.parameters.eggColors[color],
-          flatShading: true,
+          // flatShading: true,
         })
         Character.materials[color] = material
       }

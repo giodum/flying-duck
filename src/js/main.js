@@ -1,4 +1,4 @@
-/**!  */
+/**! Code inspired by Noel Delgado - https://codepen.io/noeldelgado - https://github.com/noeldelgado*/
 
 import '/src/scss/main.scss'
 
